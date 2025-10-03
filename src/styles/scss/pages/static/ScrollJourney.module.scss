@@ -76,7 +76,7 @@
   }
 
   .mobileScroll {
-    height: 100vh;
+    height: 70vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch; 
     scroll-snap-type: y mandatory;
@@ -86,8 +86,8 @@
   .slide {
     position: relative !important;
     opacity: 1 !important;
-    height: 100vh;
-    min-height: 100vh;
+    height: 70vh;
+    min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
