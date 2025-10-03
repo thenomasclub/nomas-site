@@ -1,0 +1,37 @@
+@use '../../abstracts' as *;
+
+.grid {
+    @include flex-grid(2, 1rem, center, auto);
+
+    > .col {
+        flex: 1 1 0; // take up available space equally
+        min-width: 0; // prevents flexbox overflow issues
+    }
+
+    > :nth-child(1) {
+        @include flex-col(40%);
+    }
+
+    > :nth-child(2) {
+        @include flex-col(60%);
+    }
+
+    @include respond(md, null, "max") {
+        
+        > :nth-child(1) {
+            @include flex-col(100%);
+        }
+    }
+}
+
+.heading {
+    margin-bottom: 2rem;
+}
+
+.subheading {
+    margin-bottom: 2rem;
+}
+
+.cta {
+  @include button($cream, $khaki, $gold);
+}

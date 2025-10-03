@@ -1,0 +1,14 @@
+@use '../../abstracts' as *;
+
+.membership {
+    padding: 5rem;
+    background-image: url('/images/pricing-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    @include flex-container($justify: center, $align: center);
+
+    @include respond(md, null, "max") {
+        padding: 5rem 0;
+    }
+}

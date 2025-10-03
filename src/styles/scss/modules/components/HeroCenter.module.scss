@@ -1,0 +1,62 @@
+@use '../../abstracts' as *;
+
+.hero {
+  position: relative;
+  height: 80vh;
+  width: 100%;
+
+  .contentWrap {
+    position: absolute;
+    inset: 0%;
+    z-index: 50;
+    background: $khaki;
+    @include flex-container($align: center);
+  }
+
+  .background {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2); // adjust overlay color
+    z-index: 1;
+  }
+
+  .text {
+    width:100%;
+    max-width: 1000px;
+    padding: 0 2rem;
+    margin: 0 auto;
+    text-align: center;
+
+    @include respond(xl, null, "min"){
+      padding: 0 4rem;
+    }
+
+    .pre {
+      margin-bottom: 2rem;
+    }
+
+    .title {
+      color: $base;
+      font-size: 2.4rem;
+      margin-bottom: 2rem;
+    }
+
+    .subtitle {
+      color: $base;
+      margin-bottom: 1.5rem;
+    }
+
+    .ctaButton {
+      @include button($cream, $khaki, $gold);
+    }
+  }
+}

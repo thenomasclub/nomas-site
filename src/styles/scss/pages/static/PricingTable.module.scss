@@ -1,0 +1,113 @@
+@use '../../abstracts' as *;
+@use "sass:color" as c;
+
+.pricingTable {
+  background: $cream;
+  border: 1px solid $gold;
+  border-radius: 3px;
+  padding: 2.5rem;
+
+  @include respond(md, null, "max") {
+      padding: 2rem;
+  }
+
+  .pre {
+    color: $khaki;
+    margin-bottom: 0.5rem;
+  }
+  .heading {
+    margin-bottom: 0.5rem;
+  }
+
+  .container {
+    margin: 0 auto;
+    margin-top: 3rem;
+    @include flex-container($gap: 2rem, $direction: row, $justify: center);
+
+    @include respond(md, null, "max") {
+      flex-direction: column;
+    }
+  }
+
+  .card {
+    background: $base;
+    border: 2px solid $gold;
+    border-radius: 3px;
+    padding: 2rem;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 1;  
+    @include flex-container($direction: column, $align: flex-start, $justify: space-between);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+      @include respond(md, null, "max") {
+        padding: 1.5rem;
+    }
+  }
+
+  .highlight {
+    border-color: $khaki;
+    box-shadow: 0 0 0 4px rgba($gold, 0.1);
+
+    .name {
+      color: $khaki;
+    }
+
+    .cta {
+      background: $khaki;
+      color: $cream;
+      border-color: $khaki;
+
+      &:hover {
+        background: c.adjust($khaki, $lightness: 10%);
+        border-color: c.adjust($khaki, $lightness: 10%);
+        color: $cream;
+      }
+    }
+  }
+
+  .name {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .price {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: c.adjust($default, $lightness: 20%);
+  }
+
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+
+    li {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+
+      &::before {
+        content: "✓";
+        color: $success;
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+  .cta {
+    align-self: start;
+    @include button($cream, $default, $gold);
+  }
+}

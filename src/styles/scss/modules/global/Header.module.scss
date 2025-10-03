@@ -1,0 +1,32 @@
+@use '../../abstracts' as *;
+
+.header {
+  position: fixed;
+  top: 0.5rem;
+  left: 0;
+  z-index: 999;
+  padding: 0 2rem;
+  width: 100%;
+
+  @include respond(xl, null, "min"){
+      padding: 0 4rem;
+  }
+
+  .logo {
+    width: 50px;
+    height: auto;
+  }
+
+.container {
+    margin: 0 auto;
+    background: $cream;
+    border: 1px solid $gold;
+    border-radius: 3px;
+    padding: 0.3rem 1rem;
+    @include flex-container($justify: center, $align: center);
+
+    @include respond(sm, null, "min") {
+      padding: 0.3rem 2rem;
+    }
+  }
+}

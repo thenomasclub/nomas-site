@@ -1,0 +1,55 @@
+@use '../../abstracts' as *;
+
+.content {
+  padding: 3rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-family: font-family-alt;
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  @include respond(md, null, "max") {
+    padding: 3rem 0;
+  }
+}
+
+.container {
+  padding: 3rem;
+  margin: 0 auto;
+  text-align: center;
+  background: $khaki;
+  border-radius: 3px;
+  color: $base;
+  @include flex-container($justify: center, $wrap: wrap, $gap: 2rem);
+}
+
+.stat {
+  flex: 1 1 150px;
+  border-right: 1px solid rgba($base, 0.3);
+
+  &:nth-last-child(1) {
+    border-right: none;
+  }
+
+  @include respond(md, null, "max") {
+    border-right: none;
+  }
+}
+
+.value {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+
+.label {
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+}

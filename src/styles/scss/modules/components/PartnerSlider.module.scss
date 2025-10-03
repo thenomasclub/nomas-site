@@ -1,0 +1,55 @@
+@use '../../abstracts' as *;
+
+.logoSlider {
+  overflow: hidden;
+  width: 100%;
+  @include flex-container($direction: column, $align: center);
+
+  .heading {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 6px;
+    border-bottom: 2px solid $khaki;
+
+    @include respond(md, null, "max") {
+      padding-bottom: 0;
+      border-bottom: none;
+  }
+  }
+}
+
+.track {
+  width: max-content;
+  @include flex-container();
+}
+
+.logoWrap {
+  flex: 0 0 auto;
+  padding: 0 2rem;
+  @include flex-container($align: center);
+
+  img {
+  max-height: 150px; // adjust as needed
+  width: auto;
+  object-fit: contain;
+}
+}
+
+.left {
+  animation: scrollLeft 60s linear infinite;
+}
+
+.right {
+  animation: scrollRight 60s linear infinite;
+}
+
+@keyframes scrollLeft {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); } // only move half (because we doubled logos)
+}
+
+@keyframes scrollRight {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}

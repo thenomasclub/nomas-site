@@ -1,0 +1,177 @@
+@use './variables' as *;
+@use './functions' as *;
+@use "sass:map";
+@use "sass:math";
+@use "sass:color" as c;
+
+/// Dynamic heading font sizing
+@mixin heading-scale($base-h1, $scale: 0.8) {
+  h1, .h1 { font-size: $base-h1; font-weight: 900; }
+  h2, .h2 { font-size: scale-font($base-h1, $scale, 1); font-weight: 900; }
+  h3, .h3 { font-size: scale-font($base-h1, $scale, 2); font-weight: 900; }
+  h4, .h4 { font-size: scale-font($base-h1, $scale, 3); font-weight: 600; }
+  h5, .h5 { font-size: scale-font($base-h1, $scale, 4); font-weight: 600; }
+
+  @media (max-width: 600px) {
+    $mobile-base: $base-h1 * 0.75; // 25% smaller on mobile
+
+    h1, .h1 { font-size: $mobile-base; }
+    h2, .h2 { font-size: scale-font($mobile-base, $scale, 1); }
+    h3, .h3 { font-size: scale-font($mobile-base, $scale, 2); }
+    h4, .h4 { font-size: scale-font($mobile-base, $scale, 3); }
+    h5, .h5 { font-size: scale-font($mobile-base, $scale, 4); }
+  }
+}
+
+/// Create a flex container with customizable direction, justify and align
+/// @param {string} $direction - flex-direction (row/column)
+/// @param {string} $justify - justify-content
+/// @param {string} $align - align-items
+/// @param {string} $gap - gap 
+/// @param {string} $wrap - flex-wrap
+@mixin flex-container($direction: null, $justify: null, $align: null, $gap: null, $wrap: null) {
+  & {
+    display: flex;
+
+    $props: (
+      flex-direction: $direction,
+      justify-content: $justify,
+      align-items: $align,
+      gap: $gap,
+      flex-wrap: $wrap
+    );
+
+    @each $prop, $value in $props {
+      @if $value != null {
+        #{$prop}: #{$value};
+      }
+    }
+  }
+}
+
+/// Responsive centered container with max-width and horizontal padding
+/// @param {length} $max-width - max container width
+/// @param {length} $padding-x - horizontal padding
+@mixin container($max-width: 1200px) {
+  width: 90%;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
+}
+
+/// Full-screen hero section
+/// @param {string} $bg-image - optional URL for background image
+/// @param {string} $bg-color - fallback background color
+/// @param {string} $content-align - justify-content (flex) alignment
+/// @param {string} $content-vertical - align-items (flex) alignment
+@mixin full-screen-hero($bg-image: null, $bg-color: #000, $content-align: center, $content-vertical: center) {
+  width: 100%;
+  min-height: 100vh;
+  justify-content: $content-align;
+  align-items: $content-vertical;
+  background-color: $bg-color;
+  @include flex-container();
+
+  @if $bg-image != null {
+    background-image: url(#{$bg-image});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+/// Mixin for flexible breakpoints
+/// @param {string} $from - breakpoint name OR null
+/// @param {string} $to - breakpoint name OR null
+/// @param {string} $type - "min", "max", or "between"
+@mixin respond($from, $to: null, $type: null) {
+  // get values from map
+  $from-val: if($from != null, map.get($breakpoints, $from), null);
+  $to-val: if($to != null, map.get($breakpoints, $to), null);
+
+  // error handling
+  @if $from != null and $from-val == null {
+    @error "🚨 Breakpoint `#{$from}` not found in $breakpoints map.";
+  }
+  @if $to != null and $to-val == null {
+    @error "🚨 Breakpoint `#{$to}` not found in $breakpoints map.";
+  }
+
+  // logic
+  @if $type == "max" {
+    @media (max-width: $from-val) { @content; }
+  } @else if $type == "between" and $to != null {
+    @media (min-width: $from-val) and (max-width: $to-val) { @content; }
+  } @else {
+    @media (min-width: $from-val) { @content; }
+  }
+}
+
+/// Mixin for generating button styles
+/// @param {Color} $bg - Background color
+/// @param {Color} $text [#fff] - Text color (default: white)
+/// @param {Color|null} $hover-bg [null] - Hover background color (default: darkened $bg)
+/// @param {Color|null} $hover-text [null] - Hover text color (default: same as $text)
+@mixin button($bg, $text: $default, $border, $hover-bg: null, $hover-text: null) {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 900;
+  border: 1px solid $border;
+  border-radius: 5px;
+  text-decoration: none;
+  text-align: center;
+  background-color: $bg;
+  color: $text;
+  transition: 0.3s;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background-color: if($hover-bg != null, $hover-bg, c.adjust($bg, $lightness: -20%));
+    color: if($hover-text != null, $hover-text, $text);
+  }
+}
+
+/// Flexbox Grid Mixin
+/// @param {number} $columns - number of columns
+/// @param {string} $gap - space between columns/rows
+/// @param {string} $align - vertical alignment (top, center, bottom, stretch)
+/// @param {string|number} $row-height - auto, stretch, or fixed height
+@mixin flex-grid($columns: 2, $gap: 1rem, $align: stretch, $row-height: auto) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+  align-items: if($align == top, flex-start, if($align == bottom, flex-end, $align));
+
+  @if $row-height != auto {
+    > * {
+      height: $row-height;
+    }
+  }
+
+  > * {
+    flex: 0 0 calc((100% - (#{$columns - 1} * #{$gap})) / #{$columns});
+  }
+}
+
+/// Flex Column Width Mixin
+/// Allows overriding column width per child
+/// @param {number|string} $span - percentage or fraction (e.g. 50% or 2 of 4)
+@mixin flex-col($span, $columns: null, $gap: 1rem) {
+  @if (math.unit($span) == "%") {
+    flex: 0 0 $span;
+  } @else if ($columns != null) {
+    flex: 0 0 calc((#{$span} / #{$columns}) * 100% - #{$gap});
+  } @else {
+    flex: 0 0 auto; // fallback
+  }
+}

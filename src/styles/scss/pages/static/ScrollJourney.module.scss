@@ -1,0 +1,103 @@
+@use '../../abstracts' as *;
+
+.scrollJourney {
+  position: relative;
+  background: $khaki;
+}
+
+.pinned {
+  position: sticky;
+  top: 0;
+  max-width: 80%;
+  height: 100vh;
+  margin: 0 auto;
+  text-align: center;
+  @include flex-container($align: center, $justify: center);
+
+  @include respond(xl, null, "min") {
+    max-width: 70%;
+  }
+}
+
+.slide {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 2rem;
+
+  &.active {
+    opacity: 1;
+    position: relative;
+  }
+}
+
+.icon {
+  stroke: $base;
+}
+
+.content {
+  p {
+    color: $base;
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+  }
+
+  h3 {
+    color: $cream;
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+
+  h5 {
+    color: $base;
+    font-family: $font-family-alt;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+}
+
+.ctaButton {
+  @include button($cream, $khaki, $gold);
+}
+
+@include respond(md, null, "max") {
+  .scrollJourney {
+    height: auto;
+  }
+
+  .pinned {
+    display: none;
+  }
+
+  .mobileScroll {
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; 
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 0; 
+  }
+
+  .slide {
+    position: relative !important;
+    opacity: 1 !important;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    transition: none;
+  }
+
+  .slide .content {
+    text-align: center;
+  }
+}

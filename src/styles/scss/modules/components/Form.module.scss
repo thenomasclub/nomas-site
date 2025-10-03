@@ -1,0 +1,126 @@
+@use '../../abstracts' as *;
+@use "sass:color" as c;
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.emailCapture {
+  width: 100%;
+  font-family: inherit;
+
+  .inputWrapper {
+    border-bottom: 2px solid $khaki;
+    overflow: hidden;
+    background-color: transparent;
+    @include flex-container($align: center);
+
+    input {
+      flex: 1;
+      padding: 15px 20px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: $default;
+      font-family: $font-family-heading;
+      font-weight: 900;
+      font-size: 1rem;
+
+      &::placeholder {
+        color: c.adjust($default, $lightness: 20%);
+      }
+    }
+
+    button {
+      background: transparent;
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      @include flex-container($align: center, $justify: center);
+
+      svg {
+        stroke: $khaki;
+      }
+
+      svg.spinner {
+        animation: spin 1s linear infinite;
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .policySlide {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s ease;
+    margin-top: 0;
+    margin-left: 10px;
+    @include flex-container($direction: row, $align: center);
+
+    &.visible {
+      max-height: 60px;
+      opacity: 1;
+      transform: translateY(0);
+      margin-top: 10px;
+    }
+
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: $cream;
+      border: 1px solid $gold;
+      cursor: pointer;
+      position: relative;
+      transition: 0.2s;
+      margin-right: 7px;
+
+      &:checked {
+        background: $gold;
+        border-color: $gold;
+
+        &::after {
+          content: "";
+          position: absolute;
+          left: 5px;
+          top: 2px;
+          width: 4px;
+          height: 8px;
+          border: solid $khaki;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+      }
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: $default;
+
+      a {
+        text-decoration: underline;
+        color: $default;
+      }
+    }
+  }
+
+  .successMsg {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: $success;
+  }
+
+  .errorMsg {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: $error;
+  }
+}

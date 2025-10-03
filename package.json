@@ -3,23 +3,39 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@portabletext/react": "^4.0.2",
+    "@sanity/client": "^7.10.0",
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^4.6.0",
+    "framer-motion": "^12.23.12",
+    "hamburgers": "^1.2.1",
+    "lucide-react": "^0.542.0",
+    "motion": "^12.23.22",
+    "next": "15.5.2",
+    "next-sanity": "^10.0.15",
+    "next-sanity-image": "^6.2.0",
     "react": "19.1.0",
+    "react-cookie-consent": "^9.0.0",
     "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "react-icons": "^5.5.0",
+    "sass": "^1.91.0",
+    "simple-icons": "^15.16.0",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "@eslint/eslintrc": "^3"
+    "typescript": "^5"
   }
 }

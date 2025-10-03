@@ -1,0 +1,26 @@
+@use './variables' as *;
+
+/// Scale font size by a factor and return rem units
+/// @param {number} $base - base font size in rem
+/// @param {number} $scale - scale factor (like 0.8)
+/// @param {number} $steps - number of times to apply scale
+/// @return {number} scaled font size in rem
+@function scale-font($base, $scale, $steps) {
+  @return $base * pow($scale, $steps);
+}
+
+/// Helper for power (Sass lacks native pow())
+@function pow($base, $exp) {
+  $result: 1;
+  @if $exp > 0 {
+    @for $i from 1 through $exp {
+      $result: $result * $base;
+    }
+  }
+  @else if $exp < 0 {
+    @for $i from 1 through abs($exp) {
+      $result: $result / $base;
+    }
+  }
+  @return $result;
+}

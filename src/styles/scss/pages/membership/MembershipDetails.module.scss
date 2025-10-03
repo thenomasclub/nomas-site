@@ -1,0 +1,90 @@
+@use '../../abstracts' as *;
+@use "sass:color" as c;
+
+.membershipDetails {
+    padding: 5rem 0;
+}
+
+.grid {
+    @include flex-grid(2, 2rem, flex-start, auto);
+
+    > .col {
+        flex: 1 1 0; // take up available space equally
+        min-width: 0; // prevents flexbox overflow issues
+    }
+
+    > :nth-child(1) {
+        @include flex-col(50%);
+    }
+
+    @include respond(md, null, "max") {
+        
+        > :nth-child(1) {
+            @include flex-col(100%);
+        }
+    }
+}
+
+.heading {
+    margin-bottom: 2rem;
+}
+
+.subheading {
+    margin-bottom: 2rem;
+}
+
+.cta {
+  @include button($cream, $khaki, $gold);
+}
+
+.membershipDetails {
+
+  .featuresGrid {
+    @include flex-container($direction: column, $align: stretch, $gap: 2rem);
+
+    @include respond(md, null, "max") {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+  }
+
+  .feature {
+    background: $base;
+    border-radius: 3px;
+    border: 1px solid $gold;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba($khaki ,0.05);
+    text-align: left;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    @include respond(md, null, "max") {
+        flex: 1 1 calc(50% - 0.5rem);
+        max-width: calc(50% - 0.5rem);
+    }
+
+    .icon {
+      color: $khaki;
+      margin-bottom: 0.5rem;
+
+      svg {
+        width: 25px;
+        height: 25px;
+      }
+    }
+
+    .title {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: c.adjust($default, $lightness: 20%);
+    }
+  }
+}

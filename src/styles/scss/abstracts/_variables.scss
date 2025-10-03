@@ -1,0 +1,24 @@
+// Colors
+$khaki: #132B13;
+$cream: #ECE4B7;
+$gold: #C7B134;
+$base: #FBF9EF;
+$default: #222;
+$hover: #ECE4B7;
+$success: #A5D6A7;
+$error: #EF9A9A;
+
+// Fonts
+$font-family-base: avenir-next-world, sans-serif;
+$font-family-alt: charter-bt-pro, sans-serif;
+$font-family-heading: avenir-next-world-heavy, sans-serif;
+$font-size-base: 16px;
+
+$breakpoints: (
+  "xs": 480px,   // extra small
+  "sm": 640px,   // small
+  "md": 768px,   // medium
+  "lg": 1024px,  // large
+  "xl": 1280px,  // extra large
+  "xxl": 1536px  // double extra large
+);
