@@ -39,7 +39,7 @@ export default function CookieConsentBanner() {
             position: "fixed",
             inset: "auto 20px 20px auto",
             width: "320px",
-            background: "#f3f3f330",
+            background: "#03030340",
             color: "#f3f3f3",
             borderRadius: "10px",
             padding: "20px",
