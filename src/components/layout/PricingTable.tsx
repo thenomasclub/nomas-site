@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import styles from "@/src/styles/scss/pages/static/PricingTable.module.scss";
 import { SquareArrowRight } from "lucide-react";
+import type { StripePrice } from "@/src/lib/stripe/stripePricingTable"; // 👈 we’ll define this below
 
 interface Tier {
   name: string;
@@ -22,11 +23,10 @@ export default function PricingTable() {
   useEffect(() => {
     async function fetchPrices() {
       try {
-        // 👇 Fetch from your Next.js API route
         const res = await fetch("/api/prices");
         if (!res.ok) throw new Error("Failed to fetch prices");
 
-        const prices = await res.json();
+        const prices: StripePrice[] = await res.json();
 
         const mappedTiers: Tier[] = [
           {
@@ -46,7 +46,7 @@ export default function PricingTable() {
             name: "Basic",
             price:
               formatStripePrice(
-                prices.find((p: any) => p.product === "Nomas Basic Membership")
+                prices.find((p) => p.product === "Nomas Basic Membership")
               ) || "Unknown",
             description: "Great for those who want a few extra perks.",
             features: [
@@ -62,10 +62,9 @@ export default function PricingTable() {
             name: "Exclusive",
             price:
               formatStripePrice(
-                prices.find((p: any) => p.product === "Nomas Exclusive Membership")
+                prices.find((p) => p.product === "Nomas Exclusive Membership")
               ) || "Unknown",
-            description:
-              "Best for professionals looking to grow & connect.",
+            description: "Best for professionals looking to grow & connect.",
             features: [
               "Everything in Basic Members",
               "Premium discounts from our partners",
@@ -143,7 +142,7 @@ export default function PricingTable() {
 }
 
 // 🪄 Helper — formats Stripe prices nicely
-function formatStripePrice(priceObj: any) {
+function formatStripePrice(priceObj?: StripePrice | undefined) {
   if (!priceObj) return null;
 
   const amount = (priceObj.unit_amount || 0) / 100;
