@@ -43,15 +43,12 @@ export default function PartnerSlider() {
         <div className={`${styles.track} ${styles.left}`}>
           {[...Array(2)].map((_, dupIndex) =>
             partners.map((partner) => (
-              <a
+              <div
                 key={`${partner._id}-top-${dupIndex}`}
-                href={partner.website || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={styles.logoWrap}
               >
                 <Image src={partner.logo} alt={partner.name} width={400} height={400} />
-              </a>
+              </div>
             ))
           )}
         </div>
@@ -60,15 +57,12 @@ export default function PartnerSlider() {
         <div className={`${styles.track} ${styles.right}`}>
           {[...Array(2)].map((_, dupIndex) =>
             partners.map((partner) => (
-              <a
+              <div
                 key={`${partner._id}-bottom-${dupIndex}`}
-                href={partner.website || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={styles.logoWrap}
               >
                 <Image src={partner.logo} alt={partner.name} width={400} height={400} />
-              </a>
+              </div>
             ))
           )}
         </div>

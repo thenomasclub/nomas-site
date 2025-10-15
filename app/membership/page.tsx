@@ -15,7 +15,7 @@ export default function Membership() {
         <HeroCenter 
         pre="Join our community"
         title="The Nomas Exclusive Experience"
-        subtitle="The is your passport to a private network of entrepreneurs, founders, and professionals that are built to move differently. "
+        subtitle="This is your passport to a private network of entrepreneurs, founders, and professionals who are built to move differently. Join a global community focused on helping you grow meaningful connections through private events, build a lifestyle of freedom and purpose, and expand your network with people who inspire and grow alongside you."
         className={styles.hero}
         />
 

@@ -1,24 +1,74 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import styles from "@/src/styles/scss/pages/static/ScrollJourney.module.scss";
+import Link from "next/link";
 import { MoveDown, SquareArrowRight } from "lucide-react";
 
-interface Slide {
-  id: string | number;
-  content: React.ReactNode;
-}
-
-const clamp = (v: number, a = 0, b = 1) => Math.min(Math.max(v, a), b);
-
 export default function ScrollJourney() {
-  const sectionRef = useRef<HTMLDivElement | null>(null); // desktop section
-  const mobileScrollRef = useRef<HTMLDivElement | null>(null); // mobile scroll container
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const slidesRef = useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+  const hasLockedRef = useRef(false);
 
-  const slides: Slide[] = [
+  // --- Scroll lock observer ---
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const { isIntersecting, intersectionRatio, boundingClientRect } = entry;
+          const vh = window.innerHeight;
+          const fullyInView =
+            boundingClientRect.top >= 0 && boundingClientRect.bottom <= vh;
+
+          // Lock and enable inner scroll when 70% visible
+          if (!hasLockedRef.current && intersectionRatio >= 0.6 && !fullyInView) {
+            hasLockedRef.current = true;
+            section.scrollIntoView({ behavior: "smooth" });
+
+            // Enable inner scroll slightly after snap
+            setTimeout(() => {
+              setScrollEnabled(true);
+              hasLockedRef.current = false;
+            }, 700);
+          }
+
+          // Disable scroll when section exits viewport
+          if (!isIntersecting) {
+            setScrollEnabled(false);
+          }
+        });
+      },
+      { threshold: [0, 0.5, 0.7, 1] }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  // --- Track which slide is active ---
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = slidesRef.current.findIndex((el) => el === entry.target);
+            if (index !== -1) setActive(index);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    slidesRef.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  const slides = [
     {
       id: 1,
       content: (
@@ -34,10 +84,7 @@ export default function ScrollJourney() {
       content: (
         <>
           <h5>Have you…</h5>
-          <p>
-            Struggled to find friends or connections with the same ambitions as
-            you?
-          </p>
+          <p>Struggled to find friends or connections with the same ambitions as you?</p>
         </>
       ),
     },
@@ -46,9 +93,7 @@ export default function ScrollJourney() {
       content: (
         <>
           <h5>Are you…</h5>
-          <p>
-            Trying to work from anywhere and live a life of freedom &amp; purpose?
-          </p>
+          <p>Trying to work from anywhere and live a life of freedom &amp; purpose?</p>
         </>
       ),
     },
@@ -77,132 +122,40 @@ export default function ScrollJourney() {
     },
   ];
 
-  // detect mobile (and respond to changes)
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
-    const update = () => setIsMobile(mq.matches);
-    update();
-    // modern + fallback
-    if (mq.addEventListener) mq.addEventListener("change", update);
-    else mq.addListener(update);
-    return () => {
-      if (mq.removeEventListener) mq.removeEventListener("change", update);
-      else mq.removeListener(update);
-    };
-  }, []);
-
-  // behavior switch: desktop uses sticky math; mobile uses IntersectionObserver rooted to mobile scroll container
-  useEffect(() => {
-    if (isMobile) {
-      const container = mobileScrollRef.current;
-      if (!container) return;
-
-      const slidesEls = Array.from(container.querySelectorAll(`.${styles.slide}`));
-      if (!slidesEls.length) return;
-
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const idx = slidesEls.indexOf(entry.target as Element);
-              if (idx !== -1) setActive((prev) => (prev === idx ? prev : idx));
-            }
-          });
-        },
-        {
-          root: container,
-          threshold: 0.55,
-        }
-      );
-
-      slidesEls.forEach((el) => obs.observe(el));
-      return () => obs.disconnect();
-    } else {
-      const container = sectionRef.current;
-      if (!container) return;
-
-      let ticking = false;
-
-      function update() {
-        if (!container) return;
-        const viewportHeight = window.innerHeight;
-        const containerTop = container.offsetTop;
-        const containerHeight = container.offsetHeight;
-
-        const scrollY = window.scrollY;
-        const progress = clamp(
-          (scrollY - containerTop) / (containerHeight - viewportHeight),
-          0,
-          1
-        );
-
-        const idx = Math.min(slides.length - 1, Math.floor(progress * slides.length));
-        setActive((prev) => (prev === idx ? prev : idx));
-        ticking = false;
-      }
-
-      function onScroll() {
-        if (!ticking) {
-          requestAnimationFrame(update);
-          ticking = true;
-        }
-      }
-
-      update();
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll);
-      return () => {
-        window.removeEventListener("scroll", onScroll);
-        window.removeEventListener("resize", onScroll);
-      };
-    }
-  }, [isMobile, slides.length]);
-
-  const sectionHeight = `${slides.length * 100}vh`;
+  const handleDotClick = (i: number) => {
+    slidesRef.current[i]?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <div
-      ref={sectionRef}
-      className={styles.scrollJourney}
-      // only apply the tall section height when NOT mobile
-      style={isMobile ? undefined : { height: sectionHeight }}
-      aria-roledescription="scrollytelling"
-    >
-      {/* Desktop pinned layout */}
-      {!isMobile && (
-        <div className={styles.pinned}>
-          {slides.map((slide, i) => {
-            const isActive = i === active;
-            return (
-              <div
-                key={slide.id}
-                className={`${styles.slide} ${isActive ? styles.active : ""}`}
-                aria-hidden={!isActive}
-              >
-                <div className={styles.content}>{slide.content}</div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+    <div ref={sectionRef} className={styles.scrollJourney}>
+      <div
+        className={`${styles.carousel} ${
+          scrollEnabled ? styles.carouselEnabled : styles.carouselLocked
+        }`}
+      >
+        {slides.map((slide, i) => (
+          <div
+            key={slide.id}
+            ref={(el) => {
+              slidesRef.current[i] = el;
+            }}
+            className={styles.slide}
+          >
+            <div className={styles.content}>{slide.content}</div>
+          </div>
+        ))}
+      </div>
 
-      {/* Mobile scroll-snap layout */}
-      {isMobile && (
-        <div ref={mobileScrollRef} className={styles.mobileScroll}>
-          {slides.map((slide, i) => {
-            const isActive = i === active;
-            return (
-              <div
-                key={slide.id}
-                className={`${styles.slide} ${isActive ? styles.active : ""}`}
-                aria-hidden={!isActive}
-              >
-                <div className={styles.content}>{slide.content}</div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <nav className={styles.sideNav}>
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            className={i === active ? styles.navDotActive : styles.navDot}
+            onClick={() => handleDotClick(i)}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </nav>
     </div>
   );
 }
