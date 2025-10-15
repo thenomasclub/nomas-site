@@ -12,8 +12,8 @@ export default function Footer() {
 
                 {/* Social Icons */}
                 <div className={styles.social}>
-                  <Link href="#"><FaTiktok size={25} /></Link>
-                  <Link href="#"><FaInstagram size={25} /></Link>
+                  <Link href="https://tiktok.com/@thenomasclub"><FaTiktok size={25} /></Link>
+                  <Link href="https://instagram.com/thenomasclub"><FaInstagram size={25} /></Link>
                 </div>
 
                 <div className={styles.bottom}>
