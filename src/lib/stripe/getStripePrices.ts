@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.SITE_STRIPE_SECRET_KEY!);
 
 export async function getStripePrices() {
   const products = await stripe.products.list({ active: true });
