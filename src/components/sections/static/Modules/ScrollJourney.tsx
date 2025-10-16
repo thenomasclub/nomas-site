@@ -26,7 +26,7 @@ export default function ScrollJourney() {
             boundingClientRect.top >= 0 && boundingClientRect.bottom <= vh;
 
           // Lock and enable inner scroll when 70% visible
-          if (!hasLockedRef.current && intersectionRatio >= 0.6 && !fullyInView) {
+          if (!hasLockedRef.current && intersectionRatio >= 0.7 && !fullyInView) {
             hasLockedRef.current = true;
             section.scrollIntoView({ behavior: "smooth" });
 
