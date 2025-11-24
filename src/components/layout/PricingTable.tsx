@@ -40,7 +40,7 @@ export default function PricingTable() {
               "Access to our WhatsApp community",
             ],
             cta: "Join Community",
-            url: "https://chat.whatsapp.com/D2P5NDSEVU3AOo8elVLBlc?mode=ac_c",
+            url: "https://chat.whatsapp.com/JsyiVY6HRLwC25TUxRxOox",
           },
           {
             name: "Basic",
